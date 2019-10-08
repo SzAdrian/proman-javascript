@@ -1,5 +1,6 @@
 import csv
-
+import connection
+from psycopg2 import sql
 STATUSES_FILE = './data/statuses.csv'
 BOARDS_FILE = './data/boards.csv'
 CARDS_FILE = './data/cards.csv'
@@ -21,7 +22,23 @@ def _read_csv(file_name):
         return formatted_data
 
 
-def _get_data(data_type, file, force):
+@connection.connection_handler
+def read_table(cursor,table):
+    cursor.execute(sql.SQL("SELECT * FROM {}").format(sql.Identifier(table)))
+    return cursor.fetchall()
+
+@connection.connection_handler
+def last_id(cursor,table):
+    cursor.execute(sql.SQL("SELECT MAX(id) FROM {}").format(sql.Identifier(table)))
+    return cursor.fetchall()
+
+@connection.connection_handler
+def save_data(cursor,data,table):
+    datatitle = data['title']
+    cursor.execute(sql.SQL("INSERT INTO {} ({}) VALUES ({});").format(sql.Identifier(table),sql.Identifier('title'),sql.Literal(datatitle)))
+
+
+def _get_data(data_type, table, force):
     """
     Reads defined type of data from file or cache
     :param data_type: key where the data is stored in cache
@@ -30,7 +47,7 @@ def _get_data(data_type, file, force):
     :return: OrderedDict
     """
     if force or data_type not in _cache:
-        _cache[data_type] = _read_csv(file)
+        _cache[data_type] =read_table(table)
     return _cache[data_type]
 
 
@@ -40,12 +57,12 @@ def clear_cache():
 
 
 def get_statuses(force=False):
-    return _get_data('statuses', STATUSES_FILE, force)
+    return _get_data('statuses', "status", force)
 
 
 def get_boards(force=False):
-    return _get_data('boards', BOARDS_FILE, force)
+    return _get_data('boards',"board", force)
 
 
 def get_cards(force=False):
-    return _get_data('cards', CARDS_FILE, force)
+    return _get_data('cards', "card", force)

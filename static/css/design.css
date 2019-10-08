@@ -43,7 +43,12 @@ section.board{
     background: #ffffff90;
     border-radius: 3px;
 }
-
+.card-header .fa {
+  transition: .3s transform ease-in-out;
+}
+.card-header .collapsed .fa {
+  transform: rotate(180deg);
+}
 .board-header{
     height: 50px;
     background: #fff;

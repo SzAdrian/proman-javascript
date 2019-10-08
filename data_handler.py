@@ -18,6 +18,11 @@ def get_boards():
     """
     return persistence.get_boards(force=True)
 
+def save_data(data,table):
+    persistence.save_data(data,table)
+
+def last_id(table):
+    return persistence.last_id(table)
 
 def get_cards_for_board(board_id):
     persistence.clear_cache()
