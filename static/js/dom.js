@@ -46,7 +46,7 @@ export let dom = {
 
     },
     boardTemplate: function (BoardTitle, boardID) {
-        return `<div class="card">
+        return `<div id=board-id-${boardID} class="card">
     <h5 class="card-header">
         <a id="board-title-${boardID}" data-toggle="collapse" href="#collapse-${boardID}" aria-expanded="true" aria-controls="collapse-${boardID}"
            id="heading-example" class="d-block text-decoration-none">
@@ -87,6 +87,9 @@ export let dom = {
 </div>`
     },
     switchBoards: function (resp) {
-        console.log(resp)
+        document.getElementById("board-id-newBoard").remove();
+        document.querySelector("#board-container").insertAdjacentHTML("beforeend",dom.boardTemplate(resp.title,resp.id))
+
+
     }
 };

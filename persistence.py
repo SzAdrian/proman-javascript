@@ -30,7 +30,7 @@ def read_table(cursor,table):
 @connection.connection_handler
 def last_id(cursor,table):
     cursor.execute(sql.SQL("SELECT MAX(id) FROM {}").format(sql.Identifier(table)))
-    return cursor.fetchall()
+    return cursor.fetchone()
 
 @connection.connection_handler
 def save_data(cursor,data,table):

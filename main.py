@@ -36,8 +36,11 @@ def get_cards_for_board(board_id: int):
 @json_response
 def create_new_board():
     data = request.json
-    data_handler.save_data(data,"board")
-    return data_handler.last_id("board")
+    response = {}
+    data_handler.save_data(data, "board")
+    response["id"] = data_handler.last_id("board")["max"]
+    response["title"] = data["title"]
+    return response
 
 
 def main():
