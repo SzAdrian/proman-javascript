@@ -51,6 +51,11 @@ def _get_data(data_type, table, force):
     return _cache[data_type]
 
 
+@connection.connection_handler
+def delete_data_by_id(cursor,table,id):
+    cursor.execute(sql.SQL("DELETE FROM {} WHERE id = {};").format(sql.Identifier(table),sql.Literal(id)))
+
+
 def clear_cache():
     for k in list(_cache.keys()):
         _cache.pop(k)

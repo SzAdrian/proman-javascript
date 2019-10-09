@@ -1,6 +1,6 @@
 from flask import Flask, render_template, url_for,request
 from util import json_response
-
+import persistence
 import data_handler
 
 app = Flask(__name__)
@@ -23,6 +23,11 @@ def get_boards():
     return data_handler.get_boards()
 
 
+@app.route("/get-cards")
+@json_response
+def get_cards():
+    return persistence.read_table("card")
+
 @app.route("/get-cards/<int:board_id>")
 @json_response
 def get_cards_for_board(board_id: int):
@@ -42,6 +47,12 @@ def create_new_board():
     response["title"] = data["title"]
     return response
 
+@app.route("/delete-board", methods=["POST"])
+@json_response
+def delet_board():
+    data = request.json
+    data_handler.delete_board(int(data["board_id"]))
+    return data
 
 def main():
     app.run(debug=True)
