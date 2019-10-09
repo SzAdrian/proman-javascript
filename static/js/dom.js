@@ -15,7 +15,6 @@ export let dom = {
     },
     loadButtons: function () {
         let deleteboardbuttons = document.querySelectorAll('.deleteboardbutton > button');
-        console.log(deleteboardbuttons);
         for (let button of deleteboardbuttons) {
             button.addEventListener("click", function () {
                 dataHandler.deleteBoard(button.dataset["boardId"], dom.deleteBoardHTML)
@@ -101,7 +100,7 @@ export let dom = {
     switchBoards: function (resp) {
         document.getElementById("board-id-newBoard").remove();
         document.querySelector("#board-container").insertAdjacentHTML("beforeend", dom.boardTemplate(resp.title, resp.id));
-        document.querySelector('.deleteboardbutton > button').addEventListener("click", function () {
+        document.querySelector(`[data-board-id = "${resp.id}"]`).addEventListener("click", function () {
             dataHandler.deleteBoard(resp.id, dom.deleteBoardHTML)
 
         })
