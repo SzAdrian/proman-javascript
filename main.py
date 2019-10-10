@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for,request
+from flask import Flask, render_template, url_for, request
 from util import json_response
 import persistence
 import data_handler
@@ -28,6 +28,7 @@ def get_boards():
 def get_cards():
     return persistence.read_table("card")
 
+
 @app.route("/get-cards/<int:board_id>")
 @json_response
 def get_cards_for_board(board_id: int):
@@ -37,15 +38,17 @@ def get_cards_for_board(board_id: int):
     """
     return data_handler.get_cards_for_board(board_id)
 
+
 @app.route("/createNewBoard", methods=["POST"])
 @json_response
 def create_new_board():
     data = request.json
     response = {}
-    data_handler.save_data(data, "board")
+    data_handler.save_board(data)
     response["id"] = data_handler.last_id("board")["max"]
     response["title"] = data["title"]
     return response
+
 
 @app.route("/delete-board", methods=["POST"])
 @json_response
@@ -54,13 +57,32 @@ def delet_board():
     data_handler.delete_board(int(data["board_id"]))
     return data
 
-def main():
-    app.run(debug=True)
+@app.route("/createNewCard", methods=["POST"])
+@json_response
+def create_new_card():
+    data = request.json
+    response = {}
+    data_handler.save_card(data)
+    response["id"] = data_handler.last_id("card")["max"]
+    response["title"] = data["title"]
+    response["board_id"] = data["board_id"]
+    response["status_id"] = data["status_id"]
+    return response
 
-    # Serving the favicon
-    with app.app_context():
-        app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='favicon/favicon.ico'))
+
+@app.route("/delete-card", methods=["POST"])
+@json_response
+def delete_card():
+    data = request.json
+    data_handler.delete_card(int(data["card_id"]))
+    return data
+
+def main():
+    pass
 
 
 if __name__ == '__main__':
-    main()
+    app.run(
+        host="10.44.12.70",
+        port=5000,
+    )

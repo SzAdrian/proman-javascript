@@ -33,10 +33,13 @@ def last_id(cursor,table):
     return cursor.fetchone()
 
 @connection.connection_handler
-def save_data(cursor,data,table):
-    datatitle = data['title']
-    cursor.execute(sql.SQL("INSERT INTO {} ({}) VALUES ({});").format(sql.Identifier(table),sql.Identifier('title'),sql.Literal(datatitle)))
+def save_board(cursor,data):
+    qdata = data['title']
+    cursor.execute(sql.SQL("INSERT INTO {} ({}) VALUES ({});").format(sql.Identifier("board"),sql.Identifier('title'),sql.Literal(qdata)))
 
+@connection.connection_handler
+def save_card(cursor,data):
+    cursor.execute(f"""INSERT INTO card (board_id,title,status_id) VALUES ({data["board_id"]},'{data["title"]}',{data["status_id"]})""")
 
 def _get_data(data_type, table, force):
     """

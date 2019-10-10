@@ -18,8 +18,11 @@ def get_boards():
     """
     return persistence.get_boards(force=True)
 
-def save_data(data,table):
-    persistence.save_data(data,table)
+def save_board(data):
+    persistence.save_board(data)
+
+def save_card(data):
+    persistence.save_card(data)
 
 def last_id(table):
     return persistence.last_id(table)
@@ -36,3 +39,7 @@ def get_cards_for_board(board_id):
 
 def delete_board(board_id):
     persistence.delete_data_by_id("board",board_id)
+
+
+def delete_card(card_id):
+    persistence.delete_data_by_id("card",card_id)
