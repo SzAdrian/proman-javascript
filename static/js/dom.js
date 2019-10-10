@@ -86,7 +86,7 @@ export let dom = {
     <h5 class="card-header d-inline">
         <a id="board-title-${boardID}" data-toggle="collapse" href="#collapse-${boardID}" aria-expanded="true" aria-controls="collapse-${boardID}"
            id="heading-example" class="d-inline-block text-decoration-none">
-            <i class="fa fa-chevron-down px-2"></i><p class="d-inline">${BoardTitle}</p>
+            <i class="fa fa-chevron-down px-2"></i><p class="d-inline font-weight-bold">${BoardTitle}</p>
             
              
         </a><div class="deleteboardbutton d-inline"><button class="btn btn-sm btn-danger float-right font-weight-bold" data-board-id="${boardID}"><i class="fas fa-trash-alt"></i>  Delete</button></div>
@@ -160,7 +160,7 @@ export let dom = {
     },
     cardTemplate: function (cardId, cardTitle, boardId, status) {
         return `<div id="card-id-${cardId}" class="card">
-              <div data-card-id="${cardId}" class="card-remove"><i class="fas fa-trash-alt"></i></div>
+              <div data-card-id="${cardId}" class="card-remove"><i class="fa fa-times"></i></div>
               <div id="${cardId}" data-board-id =${boardId} data-status = ${status} class="card-title">${cardTitle}</div>
          </div>`
     },
