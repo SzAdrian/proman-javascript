@@ -3,6 +3,9 @@ import {dataHandler} from "./data_handler.js";
 
 export let dom = {
     init: function () {
+        document.addEventListener("ondrag",function () {
+            console.log("DRAAAAG")
+        });
         // This function should run once, when the page is loaded.
         document.getElementById("createboard").addEventListener("click", this.newBoard);
 
@@ -21,7 +24,7 @@ export let dom = {
                 dataHandler.deleteBoard(button.dataset["boardId"], dom.deleteBoardHTML)
             });
         }
-
+        //almost same code used at line 127
         let createCardbuttons = document.querySelectorAll(".board-column-title.pl-4 > button");
         for (let button of createCardbuttons) {
             button.addEventListener("click", function () {
@@ -73,16 +76,17 @@ export let dom = {
     },
     // here comes more features
     newBoard: function () {
+        document.querySelector("#createboard").disabled = true;
         let newboard = dom.boardTemplate("New Board", "newBoard");
         let inputfield = `<input type="text" autofocus placeholder="New Board" required class="bg-transparent text-white border-0">`;
         document.getElementById("board-container").insertAdjacentHTML("beforeend", newboard);
         document.querySelector("#board-title-newBoard > p").innerHTML = inputfield;
         document.querySelector("#board-title-newBoard > p > input").addEventListener("blur", function () {
             dataHandler.createNewBoard(this.value, dom.switchBoards)
-        })
+        });
     },
     boardTemplate: function (BoardTitle, boardID) {
-        return `<div id=board-id-${boardID} class="card">
+        return `<div id=board-id-${boardID} class="card board">
     <h5 class="card-header d-inline">
         <a id="board-title-${boardID}" data-toggle="collapse" href="#collapse-${boardID}" aria-expanded="true" aria-controls="collapse-${boardID}"
            id="heading-example" class="d-inline-block text-decoration-none">
@@ -116,15 +120,18 @@ export let dom = {
 </div>`
     },
     switchBoards: function (resp) {
+        document.querySelector("#createboard").disabled = false;
         document.getElementById("board-id-newBoard").remove();
         document.querySelector("#board-container").insertAdjacentHTML("beforeend", dom.boardTemplate(resp.title, resp.id));
         document.querySelector(`[data-board-id = "${resp.id}"]`).addEventListener("click", function () {
             dataHandler.deleteBoard(resp.id, dom.deleteBoardHTML)
         });
+        //put this into a 'insertInputfield' function
         let addNewCardButtons = document.querySelectorAll(`#collapse-${resp.id}> div > div > div > div.board-column-title.pl-4 > button`);
         for (let button of addNewCardButtons) {
             button.addEventListener("click", function () {
                 let newCard = dom.cardTemplate("newCard", "NewCard", "BoardId", "Status");
+                // let inputfield -> inputfieldTemplate func
                 let inputfield = `<input type="text" autofocus placeholder="New Card" required class="bg-transparent text-white border-0 input-sm">`;
                 document.querySelector(`#board-column-content-${button.dataset["boardId"]}-${button.dataset["status_id"]}`).insertAdjacentHTML("beforeend", newCard);
                 document.querySelector("#newCard").innerHTML = inputfield;
@@ -133,6 +140,10 @@ export let dom = {
                 })
             })
         }
+        dragula(Array.from(document.querySelector(`#board-id-${resp.id}`).querySelectorAll(".board-column-content"))).on("drop",function () {
+
+
+            });
 
     },
     deleteBoardHTML: function (resp) {
@@ -140,7 +151,14 @@ export let dom = {
         document.querySelector(`#board-id-${boardId}`).remove()
     },
     addDragula: function () {
-        dragula(Array.from(document.getElementsByClassName("board-column-content")));
+        for (let board of document.querySelectorAll(".board")){
+            dragula(Array.from(board.querySelectorAll(".board-column-content"))).on("drop",function (element) {
+               let newColumnId = element.parentElement.id.slice(-1);
+               let cardId = element.id.slice(8);
+               dataHandler.save(cardId,newColumnId)
+            });
+        }
+
     },
     addEditBoardTitle: function () {
         //not working
@@ -176,5 +194,8 @@ export let dom = {
     deleteCardHTML: function (resp) {
         let cardId = resp["card_id"];
         document.querySelector(`#card-id-${cardId}`).remove()
+    },
+    alert: function (alertMessage) {
+
     }
 };

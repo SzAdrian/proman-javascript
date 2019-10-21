@@ -94,6 +94,11 @@ export let dataHandler = {
         this._api_post('/delete-card',data,(response) => {
             callback(response)
         })
-    }
+    },
+    save: function (cardId,newColumnId,callback) {
+        let data = {"card_id":cardId,"new_column_id":newColumnId};
+        this._api_post("/save-changes",data,(response) => {
+            callback(response)
+    })
     // here comes more features
 };
