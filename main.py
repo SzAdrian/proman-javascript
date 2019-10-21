@@ -77,6 +77,13 @@ def delete_card():
     data_handler.delete_card(int(data["card_id"]))
     return data
 
+@app.route("/save-changes",methods=["POST"])
+@json_response
+def route_save_changes():
+    data = request.json
+    data_handler.save_changes(data)
+    return {"response_text":"Changes Saved!"}
+
 def main():
     pass
 

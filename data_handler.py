@@ -37,6 +37,9 @@ def get_cards_for_board(board_id):
             matching_cards.append(card)
     return matching_cards
 
+def save_changes(data):
+    persistence.save_changes(data)
+
 def delete_board(board_id):
     persistence.delete_data_by_id("board",board_id)
 

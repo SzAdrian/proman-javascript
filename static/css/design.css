@@ -148,3 +148,10 @@ section.board{
 *:focus {
     outline: none;
 }
+
+.alert{
+    width: 180px;
+    position: absolute;
+    left: 80vw;
+    top: 10vh
+}

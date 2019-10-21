@@ -3,7 +3,7 @@ import {dataHandler} from "./data_handler.js";
 
 export let dom = {
     init: function () {
-        document.addEventListener("ondrag",function () {
+        document.addEventListener("ondrag", function () {
             console.log("DRAAAAG")
         });
         // This function should run once, when the page is loaded.
@@ -140,10 +140,10 @@ export let dom = {
                 })
             })
         }
-        dragula(Array.from(document.querySelector(`#board-id-${resp.id}`).querySelectorAll(".board-column-content"))).on("drop",function () {
+        dragula(Array.from(document.querySelector(`#board-id-${resp.id}`).querySelectorAll(".board-column-content"))).on("drop", function () {
 
 
-            });
+        });
 
     },
     deleteBoardHTML: function (resp) {
@@ -151,11 +151,11 @@ export let dom = {
         document.querySelector(`#board-id-${boardId}`).remove()
     },
     addDragula: function () {
-        for (let board of document.querySelectorAll(".board")){
-            dragula(Array.from(board.querySelectorAll(".board-column-content"))).on("drop",function (element) {
-               let newColumnId = element.parentElement.id.slice(-1);
-               let cardId = element.id.slice(8);
-               dataHandler.save(cardId,newColumnId)
+        for (let board of document.querySelectorAll(".board")) {
+            dragula(Array.from(board.querySelectorAll(".board-column-content"))).on("drop", function (element) {
+                let newColumnId = element.parentElement.id.slice(-1);
+                let cardId = element.id.slice(8);
+                dataHandler.save(cardId,newColumnId,dom.alert)
             });
         }
 
@@ -196,6 +196,10 @@ export let dom = {
         document.querySelector(`#card-id-${cardId}`).remove()
     },
     alert: function (alertMessage) {
-
+        document.querySelector("#alert").innerHTML = alertMessage;
+        document.querySelector("#alert").hidden = false;
+        setTimeout(function () {
+            document.querySelector("#alert").hidden = true;
+        },1000)
     }
 };

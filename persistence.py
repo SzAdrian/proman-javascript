@@ -58,6 +58,9 @@ def _get_data(data_type, table, force):
 def delete_data_by_id(cursor,table,id):
     cursor.execute(sql.SQL("DELETE FROM {} WHERE id = {};").format(sql.Identifier(table),sql.Literal(id)))
 
+@connection.connection_handler
+def save_changes(cursor,data):
+    cursor.execute("UPDATE card SET status_id= %(newcolumn)s WHERE id = %(cardid)s",{"newcolumn":data["new_column_id"],"cardid":data["card_id"]})
 
 def clear_cache():
     for k in list(_cache.keys()):

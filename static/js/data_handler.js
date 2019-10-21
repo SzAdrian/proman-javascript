@@ -96,9 +96,10 @@ export let dataHandler = {
         })
     },
     save: function (cardId,newColumnId,callback) {
-        let data = {"card_id":cardId,"new_column_id":newColumnId};
-        this._api_post("/save-changes",data,(response) => {
-            callback(response)
-    })
+        let data = {"card_id": cardId, "new_column_id": newColumnId};
+        this._api_post("/save-changes", data, (response) => {
+            callback(response.response_text)
+        })
+    }
     // here comes more features
 };
