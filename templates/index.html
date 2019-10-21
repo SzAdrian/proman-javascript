@@ -34,13 +34,15 @@
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/design.css') }}">
     <script type="module" src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+        <script src="https://kit.fontawesome.com/39c8577724.js" crossorigin="anonymous"></script>
 
 </head>
 <body>
 <h1 class="py-4">ProMan</h1>
 <div id="boards"></div>
 <div id="board-container" class="board-container">
-    <div id="alert" hidden class="alert alert-success" role="alert"></div>
+    <div id="alert" class="alert alert-success hidden" role="alert">
+</div>
     <button id="createboard" class="btn btn-primary font-weight-bold">+ Create Board</button>
     <div class="loading">Boards are loading...</div>
 </div>

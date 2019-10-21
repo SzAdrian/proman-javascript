@@ -100,6 +100,12 @@ export let dataHandler = {
         this._api_post("/save-changes", data, (response) => {
             callback(response.response_text)
         })
+    },
+    editCard: function (cardTitle,cardId,callback) {
+        let data = {"card_title":cardTitle, "card_id":cardId};
+        this._api_post("/edit-card",data,(response) => {
+            callback(response.response_text)
+        })
     }
     // here comes more features
 };

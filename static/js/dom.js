@@ -37,6 +37,13 @@ export let dom = {
                 })
             })
         }
+        let cardEditButtons = document.querySelectorAll(".card-edit");
+        cardEditButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                dom.editCard(button.parentElement.id.slice(8))
+            })
+        });
+
 
         let cardRemoveButtons = document.querySelectorAll(".card-remove");
         for (let button of cardRemoveButtons) {
@@ -69,6 +76,9 @@ export let dom = {
         for (let card of cards) {
             let cardTemplate = dom.cardTemplate(card.id, card.title, card.board_id, card.status_id);
             document.querySelector(`#board-column-content-${card.board_id}-${card.status_id}`).insertAdjacentHTML("beforeend", cardTemplate);
+            document.querySelector(`#card-id-${card.id} > .card-title > input`).addEventListener("blur", function () {
+                    dataHandler.editCard(this.value, card.id, dom.alert)
+                })
         }
         dom.loadButtons();
         dom.addDragula();
@@ -92,7 +102,6 @@ export let dom = {
            id="heading-example" class="d-inline-block text-decoration-none">
             <i class="fa fa-chevron-down px-2"></i><p class="d-inline font-weight-bold">${BoardTitle}</p>
             
-             
         </a><div class="deleteboardbutton d-inline"><button class="btn btn-sm btn-danger float-right font-weight-bold" data-board-id="${boardID}"><i class="fas fa-trash-alt"></i>  Delete</button></div>
     </h5>
     <div id="collapse-${boardID}" class="collapse show" aria-labelledby="heading-example">
@@ -155,7 +164,7 @@ export let dom = {
             dragula(Array.from(board.querySelectorAll(".board-column-content"))).on("drop", function (element) {
                 let newColumnId = element.parentElement.id.slice(-1);
                 let cardId = element.id.slice(8);
-                dataHandler.save(cardId,newColumnId,dom.alert)
+                dataHandler.save(cardId, newColumnId, dom.alert)
             });
         }
 
@@ -179,7 +188,8 @@ export let dom = {
     cardTemplate: function (cardId, cardTitle, boardId, status) {
         return `<div id="card-id-${cardId}" class="card">
               <div data-card-id="${cardId}" class="card-remove"><i class="fa fa-times"></i></div>
-              <div id="${cardId}" data-board-id =${boardId} data-status = ${status} class="card-title">${cardTitle}</div>
+              <div class="card-edit"></div>
+              <div id="${cardId}" data-board-id =${boardId} data-status = ${status} class="card-title"><input type="text" maxlength="20" autofocus value="${cardTitle}" required class="bg-transparent text-white border-0 input-sm"></div>
          </div>`
     },
 
@@ -189,17 +199,29 @@ export let dom = {
         document.querySelector(`#board-column-content-${resp.board_id}-${resp.status_id}`).insertAdjacentHTML("beforeend", dom.cardTemplate(resp.id, resp.title, resp.board_id, resp.status_id));
         document.querySelector(`#card-id-${resp.id} > div.card-remove`).addEventListener("click", function () {
             dataHandler.deleteCard(resp.id, dom.deleteCardHTML)
+
         });
+        document.querySelector(`#card-id-${cardId} > .card-title > input`).addEventListener("blur", function () {
+            dataHandler.editCard(this.value, cardId, dom.alert)
+        })
     },
     deleteCardHTML: function (resp) {
         let cardId = resp["card_id"];
         document.querySelector(`#card-id-${cardId}`).remove()
     },
     alert: function (alertMessage) {
-        document.querySelector("#alert").innerHTML = alertMessage;
-        document.querySelector("#alert").hidden = false;
+        document.querySelector("#alert").innerHTML = ` <i class="far fa-save"></i> ${alertMessage}`;
+        document.querySelector("#alert").classList.toggle("hidden");
         setTimeout(function () {
-            document.querySelector("#alert").hidden = true;
-        },1000)
+            document.querySelector("#alert").classList.toggle("hidden");
+        }, 1000)
+    },
+    editCard: function (cardId) {
+        let cardTitle = document.querySelector(`#card-id-${cardId} > .card-title`).textContent;
+        let inputfield = `<input type="text" maxlength="20" autofocus value="${cardTitle}" required class="bg-transparent text-white border-0 input-sm">`;
+        document.querySelector(`#card-id-${cardId} > .card-title`).innerHTML = inputfield;
+        document.querySelector(`#card-id-${cardId} > .card-title > input`).addEventListener("blur", function () {
+            dataHandler.editCard(this.value, cardId, dom.alert)
+        })
     }
 };

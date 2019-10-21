@@ -46,7 +46,7 @@ section.board{
   transition: .3s transform ease-in-out;
 }
 .card-header .collapsed .fa {
-  transform: rotate(180deg);
+  transform: rotate(-90deg);
 }
 .board-header{
     height: 50px;
@@ -133,7 +133,14 @@ section.board{
     font-size: 12px;
     cursor: pointer;
 }
-
+.card-edit{
+    display: block;
+    position: absolute;
+    top: 24px;
+    right: 4px;
+    font-size: 12px;
+    cursor: pointer;
+}
 .card-title{
     padding-right: 16px;
 }
@@ -150,8 +157,20 @@ section.board{
 }
 
 .alert{
-    width: 180px;
+    text-align: center;
+    width: 125px;
     position: absolute;
     left: 80vw;
-    top: 10vh
+    top: 10vh;
+    transition-duration: 0.5s;
+}
+.card-title > input{
+    width: 150px;
+}
+.hidden{
+    position: absolute;
+    left: 78vw;
+    top: 13vh;
+    opacity: 0;
+    transition-duration: 2s;
 }

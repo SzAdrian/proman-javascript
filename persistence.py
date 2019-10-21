@@ -66,6 +66,9 @@ def clear_cache():
     for k in list(_cache.keys()):
         _cache.pop(k)
 
+@connection.connection_handler
+def edit_card(cursor,data):
+    cursor.execute("UPDATE card SET title = %(cardtitle)s WHERE id = %(cardid)s",{"cardtitle":data["card_title"],"cardid":data["card_id"]})
 
 def get_statuses(force=False):
     return _get_data('statuses', "status", force)

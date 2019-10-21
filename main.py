@@ -82,7 +82,14 @@ def delete_card():
 def route_save_changes():
     data = request.json
     data_handler.save_changes(data)
-    return {"response_text":"Changes Saved!"}
+    return {"response_text":"Saved!"}
+
+@app.route("/edit-card",methods=["POST"])
+@json_response
+def route_edit_card():
+    data = request.json
+    data_handler.edit_card(data)
+    return {"response_text":"Saved!"}
 
 def main():
     pass
