@@ -91,6 +91,11 @@ def route_edit_card():
     data_handler.edit_card(data)
     return {"response_text":"Saved!"}
 
+@app.route("/edit-board", methods=["POST"])
+@json_response
+def route_edit_board():
+    return {"response_text":"Saved!"}
+
 def main():
     pass
 

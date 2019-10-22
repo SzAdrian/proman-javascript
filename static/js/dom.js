@@ -24,6 +24,12 @@ export let dom = {
                 dataHandler.deleteBoard(button.dataset["boardId"], dom.deleteBoardHTML)
             });
         }
+        // let boardEditButtons = document.querySelectorAll(".card board")
+        //  for (let button of boardEditButtons) {
+        //      button.addEventListener("click", function()){
+        //          dom.editBoard()
+        //      }
+        //  }
         //almost same code used at line 127
         let createCardbuttons = document.querySelectorAll(".board-column-title.pl-4 > button");
         for (let button of createCardbuttons) {
@@ -101,8 +107,13 @@ export let dom = {
         <a id="board-title-${boardID}" data-toggle="collapse" href="#collapse-${boardID}" aria-expanded="true" aria-controls="collapse-${boardID}"
            id="heading-example" class="d-inline-block text-decoration-none">
             <i class="fa fa-chevron-down px-2"></i><p class="d-inline font-weight-bold">${BoardTitle}</p>
-            
-        </a><div class="deleteboardbutton d-inline"><button class="btn btn-sm btn-danger float-right font-weight-bold" data-board-id="${boardID}"><i class="fas fa-trash-alt"></i>  Delete</button></div>
+        </a>
+        <div class="btn-group dropright float-right"><button type="button" class="btn text-white float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></button>
+            <div class="dropdown-menu">
+            <!-- Dropdown menu links -->
+                <a class="dropdown-item" href="#"><div class="deleteboardbutton d-inline"><button class="btn btn-sm btn-danger font-weight-bold m-0" data-board-id="${boardID}"><i class="fas fa-trash-alt"></i>Delete</button></div></a>
+                <a class="dropdown-item" href="#"><div class="editboardbutton d-inline"><button class="btn btn-sm btn-danger font-weight-bold m-0" data-board-id="${boardID}"><i class="fas fa-edit"></i>Edit</button></div></a>
+            </div>
     </h5>
     <div id="collapse-${boardID}" class="collapse show" aria-labelledby="heading-example">
         <div class="card-body">
@@ -170,22 +181,28 @@ export let dom = {
         }
 
     },
-    addEditBoardTitle: function () {
-        //not working
-        let boardtitles = document.querySelectorAll(".card-header > p");
-        console.log(boardtitles);
-        for (let title of boardtitles) {
-            title.addEventListener("dblclick", function () {
-                let inputfield = `<input type="text" autofocus placeholder="${title.textContent}" required class="bg-transparent text-white border-0">`;
-                console.log(this);
-                document.querySelector("#board-title-newBoard > p").innerHTML = inputfield;
-                document.querySelector("#board-title-newBoard > input").addEventListener("blur", function () {
-
-                })
-            })
-
-        }
-    },
+    // editBoard: function () {
+    //     let boardTitle = document.querySelector(`#board-id-${boardId} > .card board`).textContent;
+    //     let inputfield = `<input type="text" maxlength="20" autofocus value="${boardTitle}" required class="bg-transparent text-white border-0 input-sm">`;
+    //     document.querySelector(`#board-id-${boardId} > .card board`).innerHTML = inputfield;
+    //     document.querySelector(`#board-id-${boardId} > .card board > input`).addEventListener("blur", function () {
+    //         dataHandler.editCard(this.value, boardTitle, dom.alert)
+    //     })
+    // }
+    //     //not working
+    //     console.log(boardtitles);
+    //     for (let title of boardtitles) {
+    //         title.addEventListener("dblclick", function () {
+    //             let inputfield = `<input type="text" autofocus placeholder="${title.textContent}" required class="bg-transparent text-white border-0">`;
+    //             console.log(this);
+    //             document.querySelector("#board-title-newBoard > p").innerHTML = inputfield;
+    //             document.querySelector("#board-title-newBoard > input").addEventListener("blur", function () {
+    //
+    //             })
+    //         })
+    //
+    //     }
+    //     },
     cardTemplate: function (cardId, cardTitle, boardId, status) {
         return `<div id="card-id-${cardId}" class="card">
               <div data-card-id="${cardId}" class="card-remove"><i class="fa fa-times"></i></div>
