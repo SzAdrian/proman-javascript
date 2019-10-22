@@ -28,7 +28,8 @@ export let dataHandler = {
             body: JSON.stringify(
                 data
             )
-        }).then(response => response.json())  // parse the response as JSON
+        })
+            .then(response => response.json())  // parse the response as JSON
             .then(json_response => callback(json_response));  // Call the `callback` with the returned object
 
     },

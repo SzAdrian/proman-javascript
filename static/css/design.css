@@ -157,9 +157,9 @@ section.board{
 }
 
 .alert{
+    position: fixed;
     text-align: center;
     width: 125px;
-    position: absolute;
     left: 80vw;
     top: 10vh;
     transition-duration: 0.5s;
@@ -168,7 +168,7 @@ section.board{
     width: 150px;
 }
 .hidden{
-    position: absolute;
+    position: fixed;
     left: 78vw;
     top: 13vh;
     opacity: 0;

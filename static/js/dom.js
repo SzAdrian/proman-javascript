@@ -29,7 +29,7 @@ export let dom = {
         for (let button of createCardbuttons) {
             button.addEventListener("click", function () {
                 let newCard = dom.cardTemplate("newCard", "NewCard", "BoardId", "Status");
-                let inputfield = `<input type="text" autofocus placeholder="New Card" required class="bg-transparent text-white border-0 input-sm">`;
+                let inputfield = `<input type="text" placeholder="New Card" autofocus required class="bg-transparent text-white border-0 input-sm">`;
                 document.querySelector(`#board-column-content-${button.dataset["boardId"]}-${button.dataset["status_id"]}`).insertAdjacentHTML("beforeend", newCard);
                 document.querySelector("#newCard").innerHTML = inputfield;
                 document.querySelector("#newCard> input").addEventListener("blur", function () {
@@ -77,8 +77,8 @@ export let dom = {
             let cardTemplate = dom.cardTemplate(card.id, card.title, card.board_id, card.status_id);
             document.querySelector(`#board-column-content-${card.board_id}-${card.status_id}`).insertAdjacentHTML("beforeend", cardTemplate);
             document.querySelector(`#card-id-${card.id} > .card-title > input`).addEventListener("blur", function () {
-                    dataHandler.editCard(this.value, card.id, dom.alert)
-                })
+                dataHandler.editCard(this.value, card.id, dom.alert)
+            })
         }
         dom.loadButtons();
         dom.addDragula();
@@ -141,7 +141,7 @@ export let dom = {
             button.addEventListener("click", function () {
                 let newCard = dom.cardTemplate("newCard", "NewCard", "BoardId", "Status");
                 // let inputfield -> inputfieldTemplate func
-                let inputfield = `<input type="text" autofocus placeholder="New Card" required class="bg-transparent text-white border-0 input-sm">`;
+                let inputfield = `<input type="text" placeholder="New Card" required class="bg-transparent text-white border-0 input-sm">`;
                 document.querySelector(`#board-column-content-${button.dataset["boardId"]}-${button.dataset["status_id"]}`).insertAdjacentHTML("beforeend", newCard);
                 document.querySelector("#newCard").innerHTML = inputfield;
                 document.querySelector("#newCard> input").addEventListener("blur", function () {
@@ -150,8 +150,9 @@ export let dom = {
             })
         }
         dragula(Array.from(document.querySelector(`#board-id-${resp.id}`).querySelectorAll(".board-column-content"))).on("drop", function () {
-
-
+            //let newColumnId = element.parentElement.id.slice(-1);
+                //let cardId = element.id.slice(8);
+                //dataHandler.save(cardId, newColumnId, dom.alert)
         });
 
     },
@@ -189,7 +190,7 @@ export let dom = {
         return `<div id="card-id-${cardId}" class="card">
               <div data-card-id="${cardId}" class="card-remove"><i class="fa fa-times"></i></div>
               <div class="card-edit"></div>
-              <div id="${cardId}" data-board-id =${boardId} data-status = ${status} class="card-title"><input type="text" maxlength="20" autofocus value="${cardTitle}" required class="bg-transparent text-white border-0 input-sm"></div>
+              <div id="${cardId}" data-board-id =${boardId} data-status = ${status} class="card-title"><input type="text" maxlength="20" value="${cardTitle}" required class="bg-transparent text-white border-0 input-sm"></div>
          </div>`
     },
 
@@ -218,7 +219,7 @@ export let dom = {
     },
     editCard: function (cardId) {
         let cardTitle = document.querySelector(`#card-id-${cardId} > .card-title`).textContent;
-        let inputfield = `<input type="text" maxlength="20" autofocus value="${cardTitle}" required class="bg-transparent text-white border-0 input-sm">`;
+        let inputfield = `<input type="text" maxlength="20" value="${cardTitle}" required class="bg-transparent text-white border-0 input-sm">`;
         document.querySelector(`#card-id-${cardId} > .card-title`).innerHTML = inputfield;
         document.querySelector(`#card-id-${cardId} > .card-title > input`).addEventListener("blur", function () {
             dataHandler.editCard(this.value, cardId, dom.alert)
