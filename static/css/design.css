@@ -174,3 +174,7 @@ section.board{
     opacity: 0;
     transition-duration: 2s;
 }
+
+.dropdown-menu{
+    border-radius: 8px;
+}

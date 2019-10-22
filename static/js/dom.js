@@ -3,9 +3,6 @@ import {dataHandler} from "./data_handler.js";
 
 export let dom = {
     init: function () {
-        document.addEventListener("ondrag", function () {
-            console.log("DRAAAAG")
-        });
         // This function should run once, when the page is loaded.
         document.getElementById("createboard").addEventListener("click", this.newBoard);
 
@@ -18,10 +15,13 @@ export let dom = {
 
     },
     loadButtons: function () {
-        let deleteboardbuttons = document.querySelectorAll('.deleteboardbutton > button');
+        let deleteboardbuttons = document.querySelectorAll('a.deleteboardbutton');
         for (let button of deleteboardbuttons) {
             button.addEventListener("click", function () {
-                dataHandler.deleteBoard(button.dataset["boardId"], dom.deleteBoardHTML)
+                document.querySelector(`#board-id-${button.dataset["boardId"]}`).classList.add("animated", "bounceOutLeft");
+                setTimeout(function () {
+                    dataHandler.deleteBoard(button.dataset["boardId"], dom.deleteBoardHTML)
+                }, 1000);
             });
         }
         // let boardEditButtons = document.querySelectorAll(".card board")
@@ -54,7 +54,11 @@ export let dom = {
         let cardRemoveButtons = document.querySelectorAll(".card-remove");
         for (let button of cardRemoveButtons) {
             button.addEventListener("click", function () {
-                dataHandler.deleteCard(button.dataset["cardId"], dom.deleteCardHTML)
+                button.parentElement.classList.add("animated", "hinge");
+                setTimeout(function () {
+                    dataHandler.deleteCard(button.dataset["cardId"], dom.deleteCardHTML)
+                }, 1000);
+
             })
         }
     },
@@ -88,6 +92,7 @@ export let dom = {
         }
         dom.loadButtons();
         dom.addDragula();
+        dom.updateBadgeCount()
 
     },
     // here comes more features
@@ -96,9 +101,15 @@ export let dom = {
         let newboard = dom.boardTemplate("New Board", "newBoard");
         let inputfield = `<input type="text" autofocus placeholder="New Board" required class="bg-transparent text-white border-0">`;
         document.getElementById("board-container").insertAdjacentHTML("beforeend", newboard);
-        document.querySelector("#board-title-newBoard > p").innerHTML = inputfield;
-        document.querySelector("#board-title-newBoard > p > input").addEventListener("blur", function () {
-            dataHandler.createNewBoard(this.value, dom.switchBoards)
+        dom.updateBadgeCount();
+        document.querySelector(`#board-id-newBoard`).classList.add("animated", "bounceInLeft");
+        setTimeout(function () {
+            document.querySelector("#board-title-newBoard > p").innerHTML = inputfield;
+            document.querySelector("#board-title-newBoard > p > input").addEventListener("blur", function () {
+
+                dataHandler.createNewBoard(this.value, dom.switchBoards)
+            }, 1000);
+
         });
     },
     boardTemplate: function (BoardTitle, boardID) {
@@ -108,14 +119,15 @@ export let dom = {
            id="heading-example" class="d-inline-block text-decoration-none">
             <i class="fa fa-chevron-down px-2"></i><p class="d-inline font-weight-bold">${BoardTitle}</p>
         </a>
+        <span id=badge-${boardID} class="badge badge-pill badge-warning mx-2"></span>
         <div class="btn-group dropright float-right"><button type="button" class="btn text-white float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></button>
-            <div class="dropdown-menu">
+            <div class="dropdown-menu shadow-lg p-2">
             <!-- Dropdown menu links -->
-                <a class="dropdown-item" href="#"><div class="deleteboardbutton d-inline"><button class="btn btn-sm btn-danger font-weight-bold m-0" data-board-id="${boardID}"><i class="fas fa-trash-alt"></i>Delete</button></div></a>
-                <a class="dropdown-item" href="#"><div class="editboardbutton d-inline"><button class="btn btn-sm btn-danger font-weight-bold m-0" data-board-id="${boardID}"><i class="fas fa-edit"></i>Edit</button></div></a>
+                <a data-board-id="${boardID}" class="deleteboardbutton dropdown-item bg-danger text-white btn btn-danger btn-sm  py-2 text-center my-1" href="#"><div class=" d-inline"><div class="font-weight-bold m-0" ><i class="fas fa-trash-alt pr-2"></i>Delete</div></div></a>
+                <a data-board-id="${boardID}" class="editboardbutton dropdown-item bg-info text-white btn btn-info btn-sm py-2  text-center my-1" href="#"><div class="d-inline"><div class="font-weight-bold m-0" ><i class="fas fa-edit pr-2"></i>Edit</div></div></a>
             </div>
     </h5>
-    <div id="collapse-${boardID}" class="collapse show" aria-labelledby="heading-example">
+    <div id="collapse-${boardID}" class="collapse" aria-labelledby="heading-example">
         <div class="card-body">
             <div class="board-columns">
                 <div class="board-column">
@@ -143,8 +155,13 @@ export let dom = {
         document.querySelector("#createboard").disabled = false;
         document.getElementById("board-id-newBoard").remove();
         document.querySelector("#board-container").insertAdjacentHTML("beforeend", dom.boardTemplate(resp.title, resp.id));
+        dom.updateBadgeCount();
         document.querySelector(`[data-board-id = "${resp.id}"]`).addEventListener("click", function () {
-            dataHandler.deleteBoard(resp.id, dom.deleteBoardHTML)
+            document.querySelector(`#board-id-${resp.id}`).classList.add("animated", "bounceOutLeft");
+            setTimeout(function () {
+                dataHandler.deleteBoard(resp.id, dom.deleteBoardHTML)
+            }, 1000);
+
         });
         //put this into a 'insertInputfield' function
         let addNewCardButtons = document.querySelectorAll(`#collapse-${resp.id}> div > div > div > div.board-column-title.pl-4 > button`);
@@ -162,10 +179,10 @@ export let dom = {
         }
         dragula(Array.from(document.querySelector(`#board-id-${resp.id}`).querySelectorAll(".board-column-content"))).on("drop", function () {
             //let newColumnId = element.parentElement.id.slice(-1);
-                //let cardId = element.id.slice(8);
-                //dataHandler.save(cardId, newColumnId, dom.alert)
+            //let cardId = element.id.slice(8);
+            //dataHandler.save(cardId, newColumnId, dom.alert)
         });
-
+    dom.alert("Saved!");
     },
     deleteBoardHTML: function (resp) {
         let boardId = resp["board_id"];
@@ -204,7 +221,7 @@ export let dom = {
     //     }
     //     },
     cardTemplate: function (cardId, cardTitle, boardId, status) {
-        return `<div id="card-id-${cardId}" class="card">
+        return `<div id="card-id-${cardId}" class="card animatebutton">
               <div data-card-id="${cardId}" class="card-remove"><i class="fa fa-times"></i></div>
               <div class="card-edit"></div>
               <div id="${cardId}" data-board-id =${boardId} data-status = ${status} class="card-title"><input type="text" maxlength="20" value="${cardTitle}" required class="bg-transparent text-white border-0 input-sm"></div>
@@ -216,16 +233,22 @@ export let dom = {
         document.querySelector("#card-id-newCard").remove();
         document.querySelector(`#board-column-content-${resp.board_id}-${resp.status_id}`).insertAdjacentHTML("beforeend", dom.cardTemplate(resp.id, resp.title, resp.board_id, resp.status_id));
         document.querySelector(`#card-id-${resp.id} > div.card-remove`).addEventListener("click", function () {
-            dataHandler.deleteCard(resp.id, dom.deleteCardHTML)
+            document.querySelector(`#card-id-${resp.id}`).classList.add("animated", "hinge");
+            setTimeout(function () {
+                dataHandler.deleteCard(resp.id, dom.deleteCardHTML)
+            }, 1000);
+
 
         });
-        document.querySelector(`#card-id-${cardId} > .card-title > input`).addEventListener("blur", function () {
-            dataHandler.editCard(this.value, cardId, dom.alert)
-        })
+        document.querySelector(`#card-id-${resp.id} > .card-title > input`).addEventListener("blur", function () {
+            dataHandler.editCard(this.value, resp.id, dom.alert)
+        });
+        dom.alert("Saved!");
+        dom.updateBadgeCount()
     },
     deleteCardHTML: function (resp) {
-        let cardId = resp["card_id"];
-        document.querySelector(`#card-id-${cardId}`).remove()
+        document.querySelector(`#card-id-${resp.card_id}`).remove()
+        dom.updateBadgeCount();
     },
     alert: function (alertMessage) {
         document.querySelector("#alert").innerHTML = ` <i class="far fa-save"></i> ${alertMessage}`;
@@ -240,6 +263,18 @@ export let dom = {
         document.querySelector(`#card-id-${cardId} > .card-title`).innerHTML = inputfield;
         document.querySelector(`#card-id-${cardId} > .card-title > input`).addEventListener("blur", function () {
             dataHandler.editCard(this.value, cardId, dom.alert)
+        })
+    },
+    updateBadgeCount: function () {
+        const allBoards = document.querySelectorAll(".board");
+
+        allBoards.forEach(function (board) {
+            let cardCount = 0;
+            cardCount += board.querySelector(`#board-column-content-${board.id.slice(9)}-0`).children.length;
+            cardCount += board.querySelector(`#board-column-content-${board.id.slice(9)}-1`).children.length;
+            cardCount += board.querySelector(`#board-column-content-${board.id.slice(9)}-2`).children.length;
+            cardCount += board.querySelector(`#board-column-content-${board.id.slice(9)}-3`).children.length;
+            document.querySelector(`#badge-${board.id.slice(9)}`).textContent = cardCount;
         })
     }
 };
