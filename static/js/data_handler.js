@@ -106,6 +106,9 @@ export let dataHandler = {
         this._api_post("/edit-card",data,(response) => {
             callback(response.response_text)
         })
-    }
+    },
+    // editBoard: function (boardTitle,boardId, callback) {
+    //     let data = {"board-title": boardTitle, "board"};
+    // }
     // here comes more features
 };
