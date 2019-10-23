@@ -116,7 +116,7 @@ export let dom = {
         return `<div id=board-id-${boardID} class="card board">
     <h5 class="card-header d-inline">
         <a id="board-title-${boardID}" data-toggle="collapse" href="#collapse-${boardID}" aria-expanded="true" aria-controls="collapse-${boardID}"
-           id="heading-example" class="d-inline-block text-decoration-none">
+           id="heading-example" class="d-inline-block text-decoration-none collapsed">
             <i class="fa fa-chevron-down px-2"></i><p class="d-inline font-weight-bold">${BoardTitle}</p>
         </a>
         <span id=badge-${boardID} class="badge badge-pill badge-warning mx-2"></span>
@@ -237,9 +237,8 @@ export let dom = {
             setTimeout(function () {
                 dataHandler.deleteCard(resp.id, dom.deleteCardHTML)
             }, 1000);
-
-
         });
+
         document.querySelector(`#card-id-${resp.id} > .card-title > input`).addEventListener("blur", function () {
             dataHandler.editCard(this.value, resp.id, dom.alert)
         });
