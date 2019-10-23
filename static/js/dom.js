@@ -119,7 +119,7 @@ export let dom = {
     <h5 class="card-header d-inline">
         <a id="board-title-${boardID}" data-toggle="collapse" href="#collapse-${boardID}" aria-expanded="true" aria-controls="collapse-${boardID}"
            id="heading-example" class="d-inline-block text-decoration-none">
-            <i class="fa fa-chevron-down px-2"></i><span class="d-inline font-weight-bold">${BoardTitle}</span>
+            <i class="fa fa-chevron-down px-2"></i><p class="d-inline font-weight-bold">${BoardTitle}</p>
         </a>
         <span id=badge-${boardID} class="badge badge-pill badge-warning mx-2"></span>
         <div class="btn-group dropright float-right"><button type="button" class="btn text-white float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></button>
@@ -210,7 +210,7 @@ export let dom = {
         document.querySelector(`#board-title-${this.dataset["boardId"]} > input`).addEventListener("blur", function () {
             boardTitle = this.value;
             dataHandler.editBoard(boardTitle, boardId, dom.alert, function () {
-                document.querySelector(`#board-title-${boardId}`).innerHTML = `<i class="fa fa-chevron-down px-2"></i><span class="d-inline font-weight-bold">${boardTitle}</span>`
+                document.querySelector(`#board-title-${boardId}`).innerHTML = `<i class="fa fa-chevron-down px-2"></i><p class="d-inline font-weight-bold">${boardTitle}</p>`
             });
         });
     },
