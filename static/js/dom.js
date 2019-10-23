@@ -24,12 +24,14 @@ export let dom = {
                 }, 1000);
             });
         }
-        // let boardEditButtons = document.querySelectorAll(".card board")
-        //  for (let button of boardEditButtons) {
-        //      button.addEventListener("click", function()){
-        //          dom.editBoard()
-        //      }
-        //  }
+        let boardEditButtons = document.querySelectorAll(".editBoardButton")
+        console.log(boardEditButtons)
+        for (let button of boardEditButtons) {
+            button.addEventListener("click", function () {
+                dom.editBoard.call(button)
+            })
+        }
+
         //almost same code used at line 127
         let createCardbuttons = document.querySelectorAll(".board-column-title.pl-4 > button");
         for (let button of createCardbuttons) {
@@ -117,14 +119,14 @@ export let dom = {
     <h5 class="card-header d-inline">
         <a id="board-title-${boardID}" data-toggle="collapse" href="#collapse-${boardID}" aria-expanded="true" aria-controls="collapse-${boardID}"
            id="heading-example" class="d-inline-block text-decoration-none">
-            <i class="fa fa-chevron-down px-2"></i><p class="d-inline font-weight-bold">${BoardTitle}</p>
+            <i class="fa fa-chevron-down px-2"></i><span class="d-inline font-weight-bold">${BoardTitle}</span>
         </a>
         <span id=badge-${boardID} class="badge badge-pill badge-warning mx-2"></span>
         <div class="btn-group dropright float-right"><button type="button" class="btn text-white float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></button>
             <div class="dropdown-menu shadow-lg p-2">
             <!-- Dropdown menu links -->
                 <a data-board-id="${boardID}" class="deleteboardbutton dropdown-item bg-danger text-white btn btn-danger btn-sm  py-2 text-center my-1" href="#"><div class=" d-inline"><div class="font-weight-bold m-0" ><i class="fas fa-trash-alt pr-2"></i>Delete</div></div></a>
-                <a data-board-id="${boardID}" class="editboardbutton dropdown-item bg-info text-white btn btn-info btn-sm py-2  text-center my-1" href="#"><div class="d-inline"><div class="font-weight-bold m-0" ><i class="fas fa-edit pr-2"></i>Edit</div></div></a>
+                <a data-board-id="${boardID}" class="editBoardButton dropdown-item bg-info text-white btn btn-info btn-sm py-2  text-center my-1" href="#"><div class="d-inline"><div class="font-weight-bold m-0" ><i class="fas fa-edit pr-2"></i>Edit</div></div></a>
             </div>
     </h5>
     <div id="collapse-${boardID}" class="collapse" aria-labelledby="heading-example">
@@ -182,7 +184,7 @@ export let dom = {
             //let cardId = element.id.slice(8);
             //dataHandler.save(cardId, newColumnId, dom.alert)
         });
-    dom.alert("Saved!");
+        dom.alert("Saved!");
     },
     deleteBoardHTML: function (resp) {
         let boardId = resp["board_id"];
@@ -198,28 +200,23 @@ export let dom = {
         }
 
     },
-    // editBoard: function () {
-    //     let boardTitle = document.querySelector(`#board-id-${boardId} > .card board`).textContent;
-    //     let inputfield = `<input type="text" maxlength="20" autofocus value="${boardTitle}" required class="bg-transparent text-white border-0 input-sm">`;
-    //     document.querySelector(`#board-id-${boardId} > .card board`).innerHTML = inputfield;
-    //     document.querySelector(`#board-id-${boardId} > .card board > input`).addEventListener("blur", function () {
-    //         dataHandler.editCard(this.value, boardTitle, dom.alert)
-    //     })
-    // }
-    //     //not working
-    //     console.log(boardtitles);
-    //     for (let title of boardtitles) {
-    //         title.addEventListener("dblclick", function () {
-    //             let inputfield = `<input type="text" autofocus placeholder="${title.textContent}" required class="bg-transparent text-white border-0">`;
-    //             console.log(this);
-    //             document.querySelector("#board-title-newBoard > p").innerHTML = inputfield;
-    //             document.querySelector("#board-title-newBoard > input").addEventListener("blur", function () {
-    //
-    //             })
-    //         })
-    //
-    //     }
-    //     },
+
+
+    editBoard: function () {
+        let boardTitle = document.querySelector(`#board-title-${this.dataset["boardId"]}`).textContent.trim();
+        let boardId = this.dataset["boardId"];
+        let inputfield = `<input type="text" maxlength="20" autofocus value="${boardTitle}" required class="bg-transparent text-white border-0 input-sm">`;
+        document.querySelector(`#board-title-${this.dataset["boardId"]}`).innerHTML = inputfield;
+        document.querySelector(`#board-title-${this.dataset["boardId"]} > input`).addEventListener("blur", function () {
+            boardTitle = this.value;
+            dataHandler.editBoard(boardTitle, boardId, dom.alert, function () {
+                document.querySelector(`#board-title-${boardId}`).innerHTML = `<i class="fa fa-chevron-down px-2"></i><span class="d-inline font-weight-bold">${boardTitle}</span>`
+            });
+        });
+    },
+
+
+
     cardTemplate: function (cardId, cardTitle, boardId, status) {
         return `<div id="card-id-${cardId}" class="card animatebutton">
               <div data-card-id="${cardId}" class="card-remove"><i class="fa fa-times"></i></div>

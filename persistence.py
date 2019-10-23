@@ -24,7 +24,7 @@ def _read_csv(file_name):
 
 @connection.connection_handler
 def read_table(cursor,table):
-    cursor.execute(sql.SQL("SELECT * FROM {}").format(sql.Identifier(table)))
+    cursor.execute(sql.SQL("SELECT * FROM {} ORDER BY id").format(sql.Identifier(table)))
     return cursor.fetchall()
 
 @connection.connection_handler
@@ -35,7 +35,7 @@ def last_id(cursor,table):
 @connection.connection_handler
 def save_board(cursor,data):
     qdata = data['title']
-    cursor.execute(sql.SQL("INSERT INTO {} ({}) VALUES ({});").format(sql.Identifier("board"),sql.Identifier('title'),sql.Literal(qdata)))
+    cursor.execute(sql.SQL("INSERT INTO {} ({}) VALUES ({});").format(sql.Identifier("board"), sql.Identifier('title'),sql.Literal(qdata)))
 
 @connection.connection_handler
 def save_card(cursor,data):
@@ -60,7 +60,7 @@ def delete_data_by_id(cursor,table,id):
 
 @connection.connection_handler
 def save_changes(cursor,data):
-    cursor.execute("UPDATE card SET status_id= %(newcolumn)s WHERE id = %(cardid)s",{"newcolumn":data["new_column_id"],"cardid":data["card_id"]})
+    cursor.execute("UPDATE card SET status_id= %(newcolumn)s WHERE id = %(cardid)s",{"newcolumn": data["new_column_id"],"cardid":data["card_id"]})
 
 def clear_cache():
     for k in list(_cache.keys()):
@@ -68,7 +68,12 @@ def clear_cache():
 
 @connection.connection_handler
 def edit_card(cursor,data):
-    cursor.execute("UPDATE card SET title = %(cardtitle)s WHERE id = %(cardid)s",{"cardtitle":data["card_title"],"cardid":data["card_id"]})
+    cursor.execute("UPDATE card SET title = %(card_title)s WHERE id = %(card_id)s",{"card_title": data["card_title"],"card_id":data["card_id"]})
+
+
+@connection.connection_handler
+def edit_board(cursor, data):
+    cursor.execute("UPDATE board SET title = %(board_title)s WHERE id = %(board_id)s", {"board_title": data["boardTitle"], "board_id":data["boardId"]})
 
 def get_statuses(force=False):
     return _get_data('statuses', "status", force)

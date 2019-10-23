@@ -108,8 +108,12 @@ export let dataHandler = {
             callback(response.response_text)
         })
     },
-    // editBoard: function (boardTitle,boardId, callback) {
-    //     let data = {"board-title": boardTitle, "board"};
-    // }
+    editBoard: function (boardTitle,boardId, callback, callback2) {
+        let data = {"boardTitle": boardTitle, "boardId": boardId};
+        this._api_post("/edit-board", data, (response) => {
+            callback(response.response_text);
+            callback2()
+        } )
+    }
     // here comes more features
 };
