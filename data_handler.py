@@ -43,6 +43,9 @@ def save_changes(data):
 def edit_card(data):
     persistence.edit_card(data)
 
+def edit_board(data):
+    persistence.edit_board(data)
+
 def delete_board(board_id):
     persistence.delete_data_by_id("board",board_id)
 

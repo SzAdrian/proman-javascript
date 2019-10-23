@@ -94,6 +94,8 @@ def route_edit_card():
 @app.route("/edit-board", methods=["POST"])
 @json_response
 def route_edit_board():
+    data = request.json
+    data_handler.edit_board(data)
     return {"response_text":"Saved!"}
 
 def main():
