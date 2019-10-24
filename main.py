@@ -108,7 +108,6 @@ def route_save_orders():
 
 
 def main():
-    pass
 
 
 if __name__ == '__main__':
