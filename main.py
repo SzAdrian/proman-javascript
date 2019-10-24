@@ -107,8 +107,5 @@ def route_save_orders():
     return {"response_text":"Saved!"}
 
 
-def main():
-
-
 if __name__ == '__main__':
     app.run()
