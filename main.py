@@ -102,8 +102,5 @@ def main():
     pass
 
 
-if __name__ == '__main__':
-    app.run(
-        host="3.124.136.50",
-        port=5000,
-    )
+if __name__ == '__main__':git
+    app.run(host="3.124.136.50")
