@@ -105,14 +105,3 @@ def route_save_orders():
     data_list = request.json
     data_handler.save_orders(data_list)
     return {"response_text":"Saved!"}
-
-
-def main():
-    pass
-
-
-if __name__ == '__main__':
-    app.run(
-        host="10.44.12.70",
-        port=5000,
-    )
