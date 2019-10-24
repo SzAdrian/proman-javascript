@@ -103,4 +103,4 @@ def main():
 
 
 if __name__ == '__main__':
-    app.run(host="3.124.136.50")
+    app.run()
