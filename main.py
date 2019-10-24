@@ -104,6 +104,6 @@ def main():
 
 if __name__ == '__main__':
     app.run(
-        host="10.44.12.70",
+        host="3.124.136.50",
         port=5000,
     )
