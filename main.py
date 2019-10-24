@@ -26,7 +26,7 @@ def get_boards():
 @app.route("/get-cards")
 @json_response
 def get_cards():
-    return persistence.read_table("card")
+    return persistence.get_cards_in_order()
 
 
 @app.route("/get-cards/<int:board_id>")
@@ -97,6 +97,15 @@ def route_edit_board():
     data = request.json
     data_handler.edit_board(data)
     return {"response_text":"Saved!"}
+
+
+@app.route("/save-orders", methods=["POST"])
+@json_response
+def route_save_orders():
+    data_list = request.json
+    data_handler.save_orders(data_list)
+    return {"response_text":"Saved!"}
+
 
 def main():
     pass

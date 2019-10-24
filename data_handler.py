@@ -22,7 +22,8 @@ def save_board(data):
     persistence.save_board(data)
 
 def save_card(data):
-    persistence.save_card(data)
+    order = int(persistence.cards_last_order_in_column(data["status_id"],data["board_id"])["last_order"])+1
+    persistence.save_card(data,order)
 
 def last_id(table):
     return persistence.last_id(table)
@@ -50,5 +51,11 @@ def delete_board(board_id):
     persistence.delete_data_by_id("board",board_id)
 
 
+
 def delete_card(card_id):
     persistence.delete_data_by_id("card",card_id)
+
+
+def save_orders(data_list):
+    for card in data_list:
+        persistence.update_card_order(card["cardId"],card["order"])

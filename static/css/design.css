@@ -1,4 +1,4 @@
-:root{
+:root {
     --border-radius: 3px;
     --status-1: #b30c01;
     --status-2: #a87a00;
@@ -6,23 +6,27 @@
     --status-4: #0d9600;
 }
 
-body{
+body {
     min-width: 620px;
-    background: #ddd url(http://cdn.backgroundhost.com/backgrounds/subtlepatterns/diagonal-noise.png);
+    background: #eeeeee url("/static/img/ccbg.png") fixed;
+
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     font-family: 'Montserrat', sans-serif;
 }
 
-h1, .board-title, .board-column-title{
+h1, .board-title, .board-column-title {
     font-weight: 100;
 }
 
-h1{
+h1 {
     text-align: center;
     font-size: 4em;
     letter-spacing: 5px;
 }
 
-button{
+button {
     background: #222;
     color: #fff;
     border: none;
@@ -31,58 +35,62 @@ button{
     padding: 4px 10px;
 }
 
-.board-container{
+.board-container {
     max-width: 960px;
     margin: 0 auto;
 }
 
-section.board{
+section.board {
     margin: 20px;
     border: aliceblue;
     background: #ffffff90;
     border-radius: 3px;
 }
+
 .card-header .fa {
-  transition: .3s transform ease-in-out;
+    transition: .3s transform ease-in-out;
 }
+
 .card-header .collapsed .fa {
-  transform: rotate(-90deg);
+    transform: rotate(-90deg);
 }
-.board-header{
+
+.board-header {
     height: 50px;
     background: #fff;
     border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
-.board-title{
+.board-title {
     margin: 13px;
     display: inline-block;
     font-size: 20px;
 }
-.board-title, .board-add, .board-toggle{
+
+.board-title, .board-add, .board-toggle {
     display: inline-block;
 }
 
-.board-toggle{
+.board-toggle {
     float: right;
     margin: 13px;
 }
 
-.board-columns{
+.board-columns {
     display: flex;
     flex-wrap: nowrap;
 }
 
-.board-column{
+.board-column {
     padding: 10px;
     flex: 1;
 }
 
-.board-column-content{
+.board-column-content {
     min-height: 45.6px;
 }
 
-.board-column-content:empty{
+.board-column-content:empty {
     /*This only works if the tag is really empty and there is not even whitespace inside*/
     border: 4px solid #cdcdcd;
     margin-top: 4px;
@@ -90,13 +98,13 @@ section.board{
     background: #eee;
 }
 
-.board-column-title{
+.board-column-title {
     text-align: center;
     border-bottom: grey solid 1px;
     margin-bottom: 10px;
 }
 
-.card{
+.card {
     position: relative;
     background: #222;
     color: #fff;
@@ -105,27 +113,27 @@ section.board{
     padding: 4px;
 }
 
-.card-body{
+.card-body {
     background: #2e2e2e;
 }
 
-.board-column:nth-of-type(1) .card{
+.board-column:nth-of-type(1) .card {
     background: var(--status-1);
 }
 
-.board-column:nth-of-type(2) .card{
+.board-column:nth-of-type(2) .card {
     background: var(--status-2);
 }
 
-.board-column:nth-of-type(3) .card{
+.board-column:nth-of-type(3) .card {
     background: var(--status-3);
 }
 
-.board-column:nth-of-type(4) .card{
+.board-column:nth-of-type(4) .card {
     background: var(--status-4);
 }
 
-.card-remove{
+.card-remove {
     display: block;
     position: absolute;
     top: 4px;
@@ -133,7 +141,8 @@ section.board{
     font-size: 12px;
     cursor: pointer;
 }
-.card-edit{
+
+.card-edit {
     display: block;
     position: absolute;
     top: 24px;
@@ -141,7 +150,8 @@ section.board{
     font-size: 12px;
     cursor: pointer;
 }
-.card-title{
+
+.card-title {
     padding-right: 16px;
 }
 
@@ -149,14 +159,15 @@ section.board{
     outline: 0;
 }
 
-::placeholder{
+::placeholder {
     color: #ffffff;
 }
+
 *:focus {
     outline: none;
 }
 
-.alert{
+.alert {
     position: fixed;
     text-align: center;
     width: 125px;
@@ -164,10 +175,12 @@ section.board{
     top: 10vh;
     transition-duration: 0.5s;
 }
-.card-title > input{
+
+.card-title > input {
     width: 150px;
 }
-.hidden{
+
+.hidden {
     position: fixed;
     left: 78vw;
     top: 13vh;
@@ -175,6 +188,6 @@ section.board{
     transition-duration: 2s;
 }
 
-.dropdown-menu{
+.dropdown-menu {
     border-radius: 8px;
 }
