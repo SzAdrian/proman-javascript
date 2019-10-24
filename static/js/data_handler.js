@@ -96,7 +96,7 @@ export let dataHandler = {
             callback(response)
         })
     },
-    save: function (cardId,newColumnId,callback) {
+    saveDragnDrop: function (cardId, newColumnId, callback) {
         let data = {"card_id": cardId, "new_column_id": newColumnId};
         this._api_post("/save-changes", data, (response) => {
             callback(response.response_text)
@@ -114,6 +114,11 @@ export let dataHandler = {
             callback(response.response_text);
             callback2()
         } )
-    }
+    },
     // here comes more features
+    saveOrder: function(data,callback) {
+        this._api_post("/save-orders", data, (response) => {
+            callback(response.response_text);
+        } )
+    }
 };

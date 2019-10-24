@@ -38,8 +38,9 @@ def save_board(cursor,data):
     cursor.execute(sql.SQL("INSERT INTO {} ({}) VALUES ({});").format(sql.Identifier("board"), sql.Identifier('title'),sql.Literal(qdata)))
 
 @connection.connection_handler
-def save_card(cursor,data):
-    cursor.execute(f"""INSERT INTO card (board_id,title,status_id) VALUES ({data["board_id"]},'{data["title"]}',{data["status_id"]})""")
+def save_card(cursor,data,order):
+    cursor.execute(f"""INSERT INTO card (board_id,title,status_id,"order") VALUES ({data["board_id"]},'{data["title"]}',{data["status_id"]},{order})""")
+
 
 def _get_data(data_type, table, force):
     """
@@ -78,6 +79,16 @@ def edit_board(cursor, data):
 def get_statuses(force=False):
     return _get_data('statuses', "status", force)
 
+@connection.connection_handler
+def cards_last_order_in_column(cursor,column,board_id):
+    cursor.execute(f"""SELECT COALESCE(MAX(card.order),'0') last_order FROM card WHERE status_id = {column} AND board_id = {board_id}""")
+    return cursor.fetchone()
+
+@connection.connection_handler
+def get_cards_in_order(cursor):
+    cursor.execute("SELECT * FROM card ORDER BY card.order ASC")
+    return cursor.fetchall()
+
 
 def get_boards(force=False):
     return _get_data('boards',"board", force)
@@ -85,3 +96,7 @@ def get_boards(force=False):
 
 def get_cards(force=False):
     return _get_data('cards', "card", force)
+
+@connection.connection_handler
+def update_card_order(cursor,card_id, card_order):
+    cursor.execute("""UPDATE card SET "order" = %(order)s WHERE id = %(id)s""",{"order":card_order,"id":card_id})

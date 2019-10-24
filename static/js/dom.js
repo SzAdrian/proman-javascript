@@ -21,11 +21,10 @@ export let dom = {
                 document.querySelector(`#board-id-${button.dataset["boardId"]}`).classList.add("animated", "bounceOutLeft");
                 setTimeout(function () {
                     dataHandler.deleteBoard(button.dataset["boardId"], dom.deleteBoardHTML)
-                }, 1000);
+                }, 550);
             });
         }
-        let boardEditButtons = document.querySelectorAll(".editBoardButton")
-        console.log(boardEditButtons)
+        let boardEditButtons = document.querySelectorAll(".editBoardButton");
         for (let button of boardEditButtons) {
             button.addEventListener("click", function () {
                 dom.editBoard.call(button)
@@ -36,12 +35,20 @@ export let dom = {
         let createCardbuttons = document.querySelectorAll(".board-column-title.pl-4 > button");
         for (let button of createCardbuttons) {
             button.addEventListener("click", function () {
+                if (document.querySelector("#newCard")) {
+                    document.querySelector("#card-id-newCard").remove()
+                }
                 let newCard = dom.cardTemplate("newCard", "NewCard", "BoardId", "Status");
                 let inputfield = `<input type="text" placeholder="New Card" autofocus required class="bg-transparent text-white border-0 input-sm">`;
                 document.querySelector(`#board-column-content-${button.dataset["boardId"]}-${button.dataset["status_id"]}`).insertAdjacentHTML("beforeend", newCard);
                 document.querySelector("#newCard").innerHTML = inputfield;
-                document.querySelector("#newCard> input").addEventListener("blur", function () {
-                    dataHandler.createNewCard(this.value, button.dataset["boardId"], button.dataset["status_id"], dom.switchCards)
+                document.querySelector("#card-id-newCard").classList.add("animated", "fadeIn");
+                document.querySelector("#newCard > input").addEventListener("blur", function () {
+                    if (document.querySelector("#newCard > input").value === "") {
+                        document.querySelector("#card-id-newCard").remove()
+                    } else {
+                        dataHandler.createNewCard(this.value, button.dataset["boardId"], button.dataset["status_id"], dom.switchCards)
+                    }
                 })
             })
         }
@@ -56,10 +63,10 @@ export let dom = {
         let cardRemoveButtons = document.querySelectorAll(".card-remove");
         for (let button of cardRemoveButtons) {
             button.addEventListener("click", function () {
-                button.parentElement.classList.add("animated", "hinge");
+                button.parentElement.classList.add("animated", "fadeOut");
                 setTimeout(function () {
                     dataHandler.deleteCard(button.dataset["cardId"], dom.deleteCardHTML)
-                }, 1000);
+                }, 500);
 
             })
         }
@@ -110,7 +117,7 @@ export let dom = {
             document.querySelector("#board-title-newBoard > p > input").addEventListener("blur", function () {
 
                 dataHandler.createNewBoard(this.value, dom.switchBoards)
-            }, 1000);
+            }, 500);
 
         });
     },
@@ -122,11 +129,11 @@ export let dom = {
             <i class="fa fa-chevron-down px-2"></i><p class="d-inline font-weight-bold">${BoardTitle}</p>
         </a>
         <span id=badge-${boardID} class="badge badge-pill badge-warning mx-2"></span>
-        <div class="btn-group dropright float-right"><button type="button" class="btn text-white float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></button>
+        <div class="btn-group dropright float-right"><button type="button" class="btn text-white float-right rounded-circle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></button>
             <div class="dropdown-menu shadow-lg p-2">
             <!-- Dropdown menu links -->
                 <a data-board-id="${boardID}" class="deleteboardbutton dropdown-item bg-danger text-white btn btn-danger btn-sm  py-2 text-center my-1" href="#"><div class=" d-inline"><div class="font-weight-bold m-0" ><i class="fas fa-trash-alt pr-2"></i>Delete</div></div></a>
-                <a data-board-id="${boardID}" class="editBoardButton dropdown-item bg-info text-white btn btn-info btn-sm py-2  text-center my-1" href="#"><div class="d-inline"><div class="font-weight-bold m-0" ><i class="fas fa-edit pr-2"></i>Edit</div></div></a>
+                <a data-board-id="${boardID}" class="editBoardButton dropdown-item bg-info text-white btn btn-info btn-sm py-2  text-center my-1 " href="#"><div class="d-inline"><div class="font-weight-bold m-0" ><i class="fas fa-edit pr-2"></i>Edit</div></div></a>
             </div>
     </h5>
     <div id="collapse-${boardID}" class="collapse" aria-labelledby="heading-example">
@@ -162,7 +169,7 @@ export let dom = {
             document.querySelector(`#board-id-${resp.id}`).classList.add("animated", "bounceOutLeft");
             setTimeout(function () {
                 dataHandler.deleteBoard(resp.id, dom.deleteBoardHTML)
-            }, 1000);
+            }, 500);
 
         });
         //put this into a 'insertInputfield' function
@@ -179,10 +186,11 @@ export let dom = {
                 })
             })
         }
-        dragula(Array.from(document.querySelector(`#board-id-${resp.id}`).querySelectorAll(".board-column-content"))).on("drop", function () {
-            //let newColumnId = element.parentElement.id.slice(-1);
-            //let cardId = element.id.slice(8);
-            //dataHandler.save(cardId, newColumnId, dom.alert)
+        dragula(Array.from(document.querySelector(`#board-id-${resp.id}`).querySelectorAll(".board-column-content"))).on("drop", function (element) {
+            let newColumnId = element.parentElement.id.slice(-1);
+            let cardId = element.id.slice(8);
+            dataHandler.saveDragnDrop(cardId, newColumnId, dom.alert);
+            dom.updateOrder()
         });
         dom.alert("Saved!");
     },
@@ -195,7 +203,8 @@ export let dom = {
             dragula(Array.from(board.querySelectorAll(".board-column-content"))).on("drop", function (element) {
                 let newColumnId = element.parentElement.id.slice(-1);
                 let cardId = element.id.slice(8);
-                dataHandler.save(cardId, newColumnId, dom.alert)
+                dataHandler.saveDragnDrop(cardId, newColumnId, dom.alert);
+                dom.updateOrder(element.offsetParent.id.slice(9))
             });
         }
 
@@ -216,7 +225,6 @@ export let dom = {
     },
 
 
-
     cardTemplate: function (cardId, cardTitle, boardId, status) {
         return `<div id="card-id-${cardId}" class="card animatebutton">
               <div data-card-id="${cardId}" class="card-remove"><i class="fa fa-times"></i></div>
@@ -230,10 +238,10 @@ export let dom = {
         document.querySelector("#card-id-newCard").remove();
         document.querySelector(`#board-column-content-${resp.board_id}-${resp.status_id}`).insertAdjacentHTML("beforeend", dom.cardTemplate(resp.id, resp.title, resp.board_id, resp.status_id));
         document.querySelector(`#card-id-${resp.id} > div.card-remove`).addEventListener("click", function () {
-            document.querySelector(`#card-id-${resp.id}`).classList.add("animated", "hinge");
+            document.querySelector(`#card-id-${resp.id}`).classList.add("animated", "fadeOut");
             setTimeout(function () {
                 dataHandler.deleteCard(resp.id, dom.deleteCardHTML)
-            }, 1000);
+            }, 500);
         });
 
         document.querySelector(`#card-id-${resp.id} > .card-title > input`).addEventListener("blur", function () {
@@ -272,5 +280,19 @@ export let dom = {
             cardCount += board.querySelector(`#board-column-content-${board.id.slice(9)}-3`).children.length;
             document.querySelector(`#badge-${board.id.slice(9)}`).textContent = cardCount;
         })
+    },
+    updateOrder: function (boardId) {
+        let orderOfCards = [];
+        const allColumns = document.querySelectorAll(`[id*= board-column-content-${boardId}-]`);
+        for (let column of allColumns) {
+            for (let card of column.children) {
+                let oneCardData = {
+                    "cardId": card.id.slice(8),
+                    "order": Array.from(column.children).indexOf(card) + 1
+                };
+                orderOfCards.push(oneCardData)
+            }
+        }
+        dataHandler.saveOrder(orderOfCards, dom.alert)
     }
 };
