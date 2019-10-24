@@ -1,6 +1,6 @@
 from flask import Flask, render_template, url_for, request
 from util import json_response
-import persistencepython
+import persistence
 import data_handler
 
 app = Flask(__name__)
