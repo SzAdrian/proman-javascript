@@ -42,7 +42,7 @@ export let dom = {
                 let inputfield = `<input type="text" placeholder="New Card" autofocus required class="bg-transparent text-white border-0 input-sm">`;
                 document.querySelector(`#board-column-content-${button.dataset["boardId"]}-${button.dataset["status_id"]}`).insertAdjacentHTML("beforeend", newCard);
                 document.querySelector("#newCard").innerHTML = inputfield;
-                document.querySelector("#card-id-newCard").classList.add("animated", "fadeIn");
+                document.querySelector("#card-id-newCard").classList.add("animated", "bounceIn");
                 document.querySelector("#newCard > input").addEventListener("blur", function () {
                     if (document.querySelector("#newCard > input").value === "") {
                         document.querySelector("#card-id-newCard").remove()
@@ -63,10 +63,10 @@ export let dom = {
         let cardRemoveButtons = document.querySelectorAll(".card-remove");
         for (let button of cardRemoveButtons) {
             button.addEventListener("click", function () {
-                button.parentElement.classList.add("animated", "fadeOut");
+                button.parentElement.classList.add("animated", "bounceOut");
                 setTimeout(function () {
                     dataHandler.deleteCard(button.dataset["cardId"], dom.deleteCardHTML)
-                }, 500);
+                }, 700);
 
             })
         }
@@ -186,6 +186,10 @@ export let dom = {
                 })
             })
         }
+        document.querySelector(`#board-id-${resp.id}.board`).querySelector(".editBoardButton").addEventListener("click", function () {
+            dom.editBoard.call(this)
+        });
+
         dragula(Array.from(document.querySelector(`#board-id-${resp.id}`).querySelectorAll(".board-column-content"))).on("drop", function (element) {
             let newColumnId = element.parentElement.id.slice(-1);
             let cardId = element.id.slice(8);
@@ -238,10 +242,10 @@ export let dom = {
         document.querySelector("#card-id-newCard").remove();
         document.querySelector(`#board-column-content-${resp.board_id}-${resp.status_id}`).insertAdjacentHTML("beforeend", dom.cardTemplate(resp.id, resp.title, resp.board_id, resp.status_id));
         document.querySelector(`#card-id-${resp.id} > div.card-remove`).addEventListener("click", function () {
-            document.querySelector(`#card-id-${resp.id}`).classList.add("animated", "fadeOut");
+            document.querySelector(`#card-id-${resp.id}`).classList.add("animated", "bounceOut");
             setTimeout(function () {
                 dataHandler.deleteCard(resp.id, dom.deleteCardHTML)
-            }, 500);
+            }, 700);
         });
 
         document.querySelector(`#card-id-${resp.id} > .card-title > input`).addEventListener("blur", function () {
