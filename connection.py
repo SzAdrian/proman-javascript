@@ -2,22 +2,7 @@ import psycopg2
 import psycopg2.extras
 
 def get_connection_string():
-    user_name = "adrian"
-    password = "123456"
-    host = "localhost"
-    database_name = "proman"
-
-    env_variables_defined = user_name and password and host and database_name
-
-    if env_variables_defined:
-        return 'postgresql://{user_name}:{password}@{host}/{database_name}'.format(
-            user_name=user_name,
-            password=password,
-            host=host,
-            database_name=database_name
-        )
-    else:
-        raise KeyError('Some necessary environment variable(s) are not defined')
+    return 'postgresql://pkvqouchzlgwhy:ee3ac1dd43aedeb35e3a24fc74cf6f00348c5363d42cbd4170533fb16865d71c@ec2-54-217-225-16.eu-west-1.compute.amazonaws.com/d192i0bvallsbq'
 
 
 def open_database():
